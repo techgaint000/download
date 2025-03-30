@@ -6,7 +6,7 @@ const snapsave = require('./snapsave-downloader');
 const port = 3000;
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Hello World!' });
+  res.json({ message: 'Autrntication Failed' });
 });
 
 app.get('/igdl', async (req, res) => {
