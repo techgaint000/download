@@ -1,7 +1,11 @@
 const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const cors = require('cors');
 const app = express();
+
+// Enable CORS for all origins
+app.use(cors());
 const snapsave = require('./snapsave-downloader');
 const port = 3000;
 
