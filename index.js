@@ -1,16 +1,29 @@
 const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const cors = require('cors');
 const app = express();
-
-// Enable CORS for all origins
-app.use(cors());
 const snapsave = require('./snapsave-downloader');
 const port = 3000;
 
+const corsMiddleware = (req, res, next) => {
+  const allowedOrigin = 'https://instafbreels.vercel.app';
+  const requestOrigin = req.headers.origin;
+
+  if (requestOrigin === allowedOrigin) {
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+  } else {
+    res.status(403).json({ error: 'Auth Failed : Blocked Ip' });
+  }
+};
+
+// Apply CORS middleware to all routes
+app.use(corsMiddleware);
+
 app.get('/', (req, res) => {
-  res.json({ message: 'Autrntication Failed' });
+  res.json({ message: 'Authentication Failed' });
 });
 
 app.get('/igdl', async (req, res) => {
@@ -18,7 +31,7 @@ app.get('/igdl', async (req, res) => {
     const url = req.query.url;
 
     if (!url) {
-      return res.status(400).json({ error: 'URL parameter is missing' });
+      return res.status(400).json({ error: 'Failed to Authenticate' });
     }
 
     const downloadedURL = await snapsave(url);
